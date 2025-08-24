@@ -1,34 +1,18 @@
-import os
 import streamlit as st
 import tensorflow as tf
 from PIL import Image
 import numpy as np
 import cv2
 import json
-import requests
 
 # ---------------------------
 # Constants
 # ---------------------------
-MODEL_URL = "https://raw.githubusercontent.com/username/repo/main/crop_classifier_mobilenet.h5"  # Replace with your GitHub raw link
-MODEL_PATH = "crop_classifier_mobilenet.h5"
+MODEL_PATH = "crop_classifier_mobilenet.h5"   # keep the file in same folder as app.py
 CROP_INFO_FILE = "crop_info.json"
 CLASS_NAMES = ['Apple', 'Banana', 'Cotton', 'Grapes', 'Jute', 'Maize',
                'Mango', 'Millets', 'Orange', 'Paddy', 'Papaya',
                'Sugarcane', 'Tea', 'Tomato', 'Wheat']
-
-# ---------------------------
-# Download model if missing
-# ---------------------------
-if not os.path.exists(MODEL_PATH):
-    with st.spinner("🔽 Downloading model from GitHub..."):
-        r = requests.get(MODEL_URL)
-        if r.status_code == 200:
-            with open(MODEL_PATH, "wb") as f:
-                f.write(r.content)
-            st.success("✅ Model downloaded successfully!")
-        else:
-            st.error("❌ Failed to download model. Check the GitHub URL.")
 
 # ---------------------------
 # Load model
@@ -74,9 +58,6 @@ if uploaded_file and model:
     predicted_index = np.argmax(prediction)
     predicted_crop = CLASS_NAMES[predicted_index]
 
-    # Debug output (optional)
-    st.write("Raw model output:", prediction)
-    st.write("Predicted index:", predicted_index)
     st.success(f"🌱 **Predicted Crop: {predicted_crop}**")
 
     # Lookup crop info in JSON
