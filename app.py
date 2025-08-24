@@ -1,16 +1,16 @@
 import os
 import streamlit as st
-import gdown
 import tensorflow as tf
 from PIL import Image
 import numpy as np
 import cv2
 import json
+import requests
 
 # ---------------------------
 # Constants
 # ---------------------------
-MODEL_URL = "https://drive.google.com/uc?id=1nZfCYwFf9FWcDdwtyH5MF6A0r_yw9RFi"  # Direct download link
+MODEL_URL = "https://raw.githubusercontent.com/username/repo/main/crop_classifier_mobilenet.h5"  # Replace with your GitHub raw link
 MODEL_PATH = "crop_classifier_mobilenet.h5"
 CROP_INFO_FILE = "crop_info.json"
 CLASS_NAMES = ['Apple', 'Banana', 'Cotton', 'Grapes', 'Jute', 'Maize',
@@ -21,8 +21,14 @@ CLASS_NAMES = ['Apple', 'Banana', 'Cotton', 'Grapes', 'Jute', 'Maize',
 # Download model if missing
 # ---------------------------
 if not os.path.exists(MODEL_PATH):
-    with st.spinner("🔽 Downloading model..."):
-        gdown.download(MODEL_URL, MODEL_PATH, quiet=False)
+    with st.spinner("🔽 Downloading model from GitHub..."):
+        r = requests.get(MODEL_URL)
+        if r.status_code == 200:
+            with open(MODEL_PATH, "wb") as f:
+                f.write(r.content)
+            st.success("✅ Model downloaded successfully!")
+        else:
+            st.error("❌ Failed to download model. Check the GitHub URL.")
 
 # ---------------------------
 # Load model
@@ -80,7 +86,7 @@ if uploaded_file and model:
     if found_crop:
         st.subheader("📄 Crop Information:")
         for key, value in found_crop.items():
-            if key != "name":  # skip name since already displayed
+            if key != "name":
                 st.markdown(f"**{key.replace('_', ' ').title()}**: {value}")
     else:
         st.warning("ℹ️ No additional information found for this crop.")
