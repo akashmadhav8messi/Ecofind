@@ -7,27 +7,36 @@ import numpy as np
 import cv2
 import json
 
+# ---------------------------
 # Constants
-MODEL_URL = "https://drive.google.com/uc?id=1nZfCYwFf9FWcDdwtyH5MF6A0r_yw9RFi"  # replace with your model's URL
+# ---------------------------
+MODEL_URL = "https://drive.google.com/uc?id=1nZfCYwFf9FWcDdwtyH5MF6A0r_yw9RFi"  # Direct download link
 MODEL_PATH = "crop_classifier_mobilenet.h5"
 CROP_INFO_FILE = "crop_info.json"
 CLASS_NAMES = ['Apple', 'Banana', 'Cotton', 'Grapes', 'Jute', 'Maize',
                'Mango', 'Millets', 'Orange', 'Paddy', 'Papaya',
                'Sugarcane', 'Tea', 'Tomato', 'Wheat']
 
+# ---------------------------
 # Download model if missing
+# ---------------------------
 if not os.path.exists(MODEL_PATH):
     with st.spinner("🔽 Downloading model..."):
         gdown.download(MODEL_URL, MODEL_PATH, quiet=False)
 
+# ---------------------------
 # Load model
+# ---------------------------
 try:
     model = tf.keras.models.load_model(MODEL_PATH)
+    st.success("✅ Model loaded successfully!")
 except Exception as e:
     st.error(f"❌ Error loading model: {e}")
     model = None
 
+# ---------------------------
 # Load crop info
+# ---------------------------
 try:
     with open(CROP_INFO_FILE, 'r') as f:
         crop_info = json.load(f)
@@ -35,7 +44,9 @@ except Exception as e:
     st.error(f"❌ Error loading crop_info.json: {e}")
     crop_info = {"crops": []}
 
+# ---------------------------
 # Streamlit UI
+# ---------------------------
 st.set_page_config(page_title="Ecofind 🌾", page_icon="🌱")
 st.title("🌾 Ecofind – Crop Identifier")
 st.write("Upload an image of a crop's leaf, fruit, or field to identify it using AI.")
@@ -57,7 +68,7 @@ if uploaded_file and model:
     predicted_index = np.argmax(prediction)
     predicted_crop = CLASS_NAMES[predicted_index]
 
-    # Debug output
+    # Debug output (optional)
     st.write("Raw model output:", prediction)
     st.write("Predicted index:", predicted_index)
     st.success(f"🌱 **Predicted Crop: {predicted_crop}**")
