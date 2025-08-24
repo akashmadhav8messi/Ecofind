@@ -8,7 +8,7 @@ import cv2
 import json
 
 # Constants
-MODEL_URL = "https://drive.google.com/file/d/1nZfCYwFf9FWcDdwtyH5MF6A0r_yw9RFi/view?usp=drivesdk"  # replace with your model's URL
+MODEL_URL = "MODEL_URL = "https://drive.google.com/uc?id=1nZfCYwFf9FWcDdwtyH5MF6A0r_yw9RFi"  # replace with your model's URL
 MODEL_PATH = "crop_classifier_mobilenet.h5"
 CROP_INFO_FILE = "crop_info.json"
 CLASS_NAMES = ['Apple', 'Banana', 'Cotton', 'Grapes', 'Jute', 'Maize',
