@@ -58,7 +58,7 @@ Ecofind is a lightweight AI-powered crop identification tool built for students,
 """)
 
 st.sidebar.markdown("---")
-st.sidebar.caption("Built with ❤️ by Ashik Madhav.")
+st.sidebar.caption("Built with ❤️ by Akash Madhav.")
 
 # 5. Upload & prediction section
 uploaded_file = st.file_uploader("📸 Upload Crop Image", type=["jpg", "jpeg", "png"])
